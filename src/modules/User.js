@@ -2,7 +2,8 @@ import { $ } from "./utils.js";
 
 class User {
 
-    static hereCoutner = 0;
+    static #hereCoutner = 0;
+    static usersElements = [];
 
     #title;
     #first;
@@ -29,6 +30,8 @@ class User {
 
         this.#generateElement();
         this.#userElement.addEventListener("click", () => this.#changeStatus())
+
+        User.usersElements.push(this.#userElement);
     }
 
     #generateElement() {
@@ -75,7 +78,7 @@ class User {
         this.#isHere = !this.#isHere;
         this.#userElement.dataset.present = this.#isHere;
 
-        User.hereCoutner += this.#isHere ? 1 : -1;
+        User.#hereCoutner += this.#isHere ? 1 : -1;
 
         User.refreshCounter();
     }
@@ -87,8 +90,30 @@ class User {
 
     static refreshCounter() {
         const counterText = $(".counter").textContent.split("/");
-        counterText[0] = User.hereCoutner;
+        counterText[0] = User.#hereCoutner;
         $(".counter").textContent = counterText.join("/");
+    }
+
+    static orderByAge() {
+        User.usersElements.sort((a, b) => {
+            const ageA = a.querySelector(".user--info p").textContent.split(" ")[0];
+            const ageB = b.querySelector(".user--info p").textContent.split(" ")[0];
+            return ageA - ageB;
+        });
+
+        $("main").innerHTML = "";
+        User.usersElements.forEach(user => $("main").appendChild(user));
+    }
+
+    static orderByName() {
+        User.usersElements.sort((a, b) => {
+            const nameA = a.querySelector(".user--info h1").textContent.split(" ")[2];
+            const nameB = b.querySelector(".user--info h1").textContent.split(" ")[2];
+            return nameA.localeCompare(nameB);
+        });
+
+        $("main").innerHTML = "";
+        User.usersElements.forEach(user => $("main").appendChild(user));
     }
 }
 

@@ -26,32 +26,27 @@ const renderApp = async () => {
     const sortedUsers = [...users].sort((a, b) => a.last.localeCompare(b.last));
     sortedUsers.forEach(user => (new User(user)).render());
 
-    const sortNameBtn = $("#sort--name");
-    const sortAgeBtn = $("#sort--age");
-
-    sortNameBtn.addEventListener("click", () => {
-        if (sortNameBtn.classList.contains("selected")) return;
-
-        sortedUsers.sort((a, b) => a.last.localeCompare(b.last));
-
-        $("main").innerHTML = "";
-        sortedUsers.forEach(user => (new User(user)).render());
-
-        sortNameBtn.classList.add("selected");
-        sortAgeBtn.classList.remove("selected");
-    });
-
-    sortAgeBtn.addEventListener("click", () => {
-        if (sortAgeBtn.classList.contains("selected")) return;
-
-        sortedUsers.sort((a, b) => a.age - b.age);
-
-        $("main").innerHTML = "";
-        sortedUsers.forEach(user => (new User(user)).render());
-
-        sortNameBtn.classList.remove("selected");
-        sortAgeBtn.classList.add("selected");
-    });
 }
 
 renderApp();
+
+const sortNameBtn = $("#sort--name");
+const sortAgeBtn = $("#sort--age");
+
+sortNameBtn.addEventListener("click", () => {
+    if (sortNameBtn.classList.contains("selected")) return;
+
+    User.orderByName();
+
+    sortNameBtn.classList.add("selected");
+    sortAgeBtn.classList.remove("selected");
+});
+
+sortAgeBtn.addEventListener("click", () => {
+    if (sortAgeBtn.classList.contains("selected")) return;
+
+    User.orderByAge();
+
+    sortNameBtn.classList.remove("selected");
+    sortAgeBtn.classList.add("selected");
+});

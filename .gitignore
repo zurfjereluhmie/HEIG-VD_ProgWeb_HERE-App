@@ -21,3 +21,5 @@ target/
 
 # Parcel
 .parcel-cache
+# Local Netlify folder
+.netlify
