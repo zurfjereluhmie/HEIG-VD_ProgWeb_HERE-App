@@ -47,6 +47,8 @@ class User {
 
         const h1 = document.createElement("h1");
         h1.textContent = `${this.#title} ${this.#first} ${this.#last}`;
+        h1.dataset.first = this.#first;
+        h1.dataset.last = this.#last;
 
         const age = document.createElement("p");
         age.textContent = `${this.#age} years old`;
@@ -107,8 +109,8 @@ class User {
 
     static orderByName() {
         User.usersElements.sort((a, b) => {
-            const nameA = a.querySelector(".user--info h1").textContent.split(" ")[2];
-            const nameB = b.querySelector(".user--info h1").textContent.split(" ")[2];
+            const nameA = a.querySelector(".user--info h1").dataset.last;
+            const nameB = b.querySelector(".user--info h1").dataset.last;
             return nameA.localeCompare(nameB);
         });
 
