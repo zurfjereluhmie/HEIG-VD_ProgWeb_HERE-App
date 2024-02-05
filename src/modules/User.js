@@ -1,9 +1,8 @@
-import { $ } from "./utils.js";
+import { $, $$ } from "./utils.js";
 
 class User {
 
-    static #hereCoutner = 0;
-    static usersElements = [];
+    static #usersElements = [];
 
     #title;
     #first;
@@ -31,7 +30,7 @@ class User {
         this.#generateElement();
         this.#userElement.addEventListener("click", () => this.#changeStatus())
 
-        User.usersElements.push(this.#userElement);
+        User.#usersElements.push(this.#userElement);
     }
 
     #generateElement() {
@@ -80,8 +79,6 @@ class User {
         this.#isHere = !this.#isHere;
         this.#userElement.dataset.present = this.#isHere;
 
-        User.#hereCoutner += this.#isHere ? 1 : -1;
-
         User.refreshCounter();
     }
 
@@ -92,30 +89,30 @@ class User {
 
     static refreshCounter() {
         const counterText = $(".counter").textContent.split("/");
-        counterText[0] = User.#hereCoutner;
+        counterText[0] = $$("[data-present='true']").length;
         $(".counter").textContent = counterText.join("/");
     }
 
     static orderByAge() {
-        User.usersElements.sort((a, b) => {
+        User.#usersElements.sort((a, b) => {
             const ageA = a.querySelector(".user--info p").textContent.split(" ")[0];
             const ageB = b.querySelector(".user--info p").textContent.split(" ")[0];
             return ageA - ageB;
         });
 
         $("main").innerHTML = "";
-        User.usersElements.forEach(user => $("main").appendChild(user));
+        User.#usersElements.forEach(user => user.render());
     }
 
     static orderByName() {
-        User.usersElements.sort((a, b) => {
+        User.#usersElements.sort((a, b) => {
             const nameA = a.querySelector(".user--info h1").dataset.last;
             const nameB = b.querySelector(".user--info h1").dataset.last;
             return nameA.localeCompare(nameB);
         });
 
         $("main").innerHTML = "";
-        User.usersElements.forEach(user => $("main").appendChild(user));
+        User.#usersElements.forEach(user => user.render());
     }
 }
 
